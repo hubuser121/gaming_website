@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FF ARENA - Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background: #222;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #f39c12;
+      width: 320px;
+      text-align: center;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+    }
+    button {
+      background: #f39c12;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      color: #121212;
+      width: 100%;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #d87e0a;
+    }
+    .error {
+      color: #e74c3c;
+      margin-bottom: 1rem;
+    }
+    .register-link {
+      margin-top: 1rem;
+      color: #f39c12;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .register-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login to FF ARENA ESPORTS</h2>
+    <div id="errorMsg" class="error" style="display:none;"></div>
+    <input type="text" id="loginUsername" placeholder="Enter your username" autocomplete="off" />
+    <input type="password" id="loginPassword" placeholder="Enter your password" />
+    <button id="loginBtn">Login</button>
+
+    <!-- Register link added here -->
+    <a href="register.html" class="register-link">New user? Register here</a>
+  </div>
+
+  <script>
+    const loginBtn = document.getElementById('loginBtn');
+    const usernameInput = document.getElementById('loginUsername');
+    const passwordInput = document.getElementById('loginPassword');
+    const errorMsg = document.getElementById('errorMsg');
+
+    loginBtn.addEventListener('click', () => {
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!username) {
+        errorMsg.textContent = 'Please enter a username.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+      if (!password) {
+        errorMsg.textContent = 'Please enter a password.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const user = users.find(u => u.username === username);
+
+      if (!user) {
+        errorMsg.textContent = 'User not found. Please register first.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (user.password !== password) {
+        errorMsg.textContent = 'Incorrect password.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      // Successful login
+      localStorage.setItem('loggedInUser', username);
+
+      // Initialize userGames entry if not exists
+      const allGames = JSON.parse(localStorage.getItem('userGames')) || {};
+      if (!allGames[username]) {
+        allGames[username] = [];
+        localStorage.setItem('userGames', JSON.stringify(allGames));
+      }
+
+      window.location.href = 'index.html';
+    });
+
+    // Optional: allow pressing Enter key to submit login
+    [usernameInput, passwordInput].forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          loginBtn.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
