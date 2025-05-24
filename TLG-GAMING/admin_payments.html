@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - Manage Payments</title>
+  <style>
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #f39c12;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #555;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #333;
+    }
+    button {
+      background-color: #27ae60;
+      border: none;
+      padding: 8px 12px;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+    button.reject {
+      background-color: #c0392b;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <h2>Manage Payments</h2>
+  <table id="paymentsTable">
+    <thead>
+      <tr>
+        <th>Payment ID</th>
+        <th>Player Name</th>
+        <th>Team Size</th>
+        <th>IGN</th>
+        <th>Tournament</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Payments will be dynamically loaded here -->
+    </tbody>
+  </table>
+
+  <script>
+    const paymentsTableBody = document.querySelector("#paymentsTable tbody");
+    const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
+
+    function loadPayments() {
+      const payments = JSON.parse(localStorage.getItem("payments")) || [];
+      paymentsTableBody.innerHTML = "";
+
+      if (payments.length === 0) {
+        paymentsTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No payment requests found.</td></tr>`;
+        return;
+      }
+
+      payments.forEach((payment, index) => {
+        const tr = document.createElement("tr");
+
+        const tournamentName = tournaments[payment.tournamentIndex]?.name || "Unknown";
+
+        tr.innerHTML = `
+          <td>${payment.paymentId}</td>
+          <td>${payment.user}</td>
+          <td>${payment.teamSize}</td>
+          <td>${payment.ign}</td>
+          <td>${tournamentName}</td>
+          <td>${payment.approved ? "Approved" : "Pending"}</td>
+          <td>
+            <button ${payment.approved ? "disabled" : ""} onclick="approvePayment(${index})">Approve</button>
+            <button ${payment.approved ? "disabled" : ""} class="reject" onclick="rejectPayment(${index})">Reject</button>
+          </td>
+        `;
+
+        paymentsTableBody.appendChild(tr);
+      });
+    }
+
+    function approvePayment(index) {
+      const payments = JSON.parse(localStorage.getItem("payments")) || [];
+      payments[index].approved = true;
+      localStorage.setItem("payments", JSON.stringify(payments));
+      alert(`Payment by ${payments[index].user} approved.`);
+
+      // Add user to participants for the tournament
+      let participants = JSON.parse(localStorage.getItem("participants")) || {};
+      const tournamentIndex = payments[index].tournamentIndex;
+      if (!participants[tournamentIndex]) participants[tournamentIndex] = [];
+      if (!participants[tournamentIndex].includes(payments[index].user)) {
+        participants[tournamentIndex].push(payments[index].user);
+      }
+      localStorage.setItem("participants", JSON.stringify(participants));
+
+      loadPayments();
+    }
+
+    function rejectPayment(index) {
+      const payments = JSON.parse(localStorage.getItem("payments")) || [];
+      const rejectedUser = payments[index].user;
+      if (confirm(`Reject payment from ${rejectedUser}?`)) {
+        payments.splice(index, 1);
+        localStorage.setItem("payments", JSON.stringify(payments));
+        alert("Payment rejected and removed.");
+        loadPayments();
+      }
+    }
+
+    loadPayments();
+  </script>
+</body>
+</html>

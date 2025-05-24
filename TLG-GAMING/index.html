@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FF ARENA ESPORTS</title>
+  <style>
+    body {
+      background-image: url('freefire-background.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      }
+    header {
+      background: #222;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #f39c12;
+    }
+    nav {
+      background: #333;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0.5rem;
+    }
+    nav button {
+      background: #f39c12;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      color: #121212;
+      transition: background 0.3s ease;
+    }
+    nav button:hover {
+      background: #d87e0a;
+    }
+    section {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: #222;
+      padding: 1.5rem 2rem;
+      border-radius: 8px;
+    }
+    h2 {
+      color: #f39c12;
+      margin-bottom: 1rem;
+    }
+    #profileGames .game-entry,
+    #tournamentsList .game-entry {
+      background: #333;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    a {
+      color: #f39c12;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    #logoutBtn {
+      background: #e74c3c;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      color: white;
+      margin-top: 1rem;
+    }
+    #logoutBtn:hover {
+      background: #c0392b;
+    }
+    /* Hide all sections initially */
+    section {
+      display: none;
+    }
+
+    /* Join Button Style */
+    .joinBtn {
+      background: #27ae60;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-radius: 4px;
+      color: white;
+      transition: background 0.3s ease;
+    }
+    .joinBtn:hover {
+      background: #1e8449;
+    }
+
+    /* Modal styles */
+    #paymentModal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+    }
+    #paymentModal .modal-content {
+      background-color: #222;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      color: #eee;
+      position: relative;
+    }
+    #paymentModal h3 {
+      margin-top: 0;
+      color: #f39c12;
+    }
+    #paymentModal label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+    #paymentModal input[type="text"],
+    #paymentModal input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    #paymentModal button {
+      background: #f39c12;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      color: #121212;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+    #paymentModal button:hover {
+      background: #d87e0a;
+    }
+    #paymentModal .closeBtn {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #f39c12;
+      background: none;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>FF ARENA ESPORTS</header>
+
+  <nav>
+    <button id="btnProfile">Profile</button>
+    <button id="btnGames">Games</button>
+    <button id="btnRules">Rules</button>
+  </nav>
+
+  <!-- Profile Section -->
+  <section id="profileSection">
+    <h2>My Profile</h2>
+    <div id="profileGames">Loading games...</div>
+    <button id="logoutBtn">Logout</button>
+    <h3>Customer Support</h3>
+    <p>If you have any disputes, mail us at <a href="mailto:kn970107@gmail.com">kn970107@gmail.com</a></p>
+  </section>
+
+  <!-- Games Section -->
+  <section id="gamesSection">
+    <h2>Upcoming Tournaments</h2>
+    <div id="tournamentsList">
+      <!-- Tournaments added dynamically by admin later -->
+      <p>No tournaments available yet.</p>
+    </div>
+  </section>
+
+  <!-- Rules Section -->
+  <section id="rulesSection">
+    <h2>Tournament Rules</h2>
+    <ul>
+      <li><strong>Platform:</strong> The tournament will be played strictly on mobile devices only. Use of emulators or other platforms is not allowed unless specified.</li>
+      <li><strong>Room Entry:</strong> After the Room ID and Password are issued by the organizers, all players must join the room within 2 to 4 minutes. Players failing to join on time will be considered absent for that match.</li>
+      <li><strong>Strict Anti-Cheating Policy:</strong> Any use of hacks, cheats, bots, scripts, or unauthorized software will result in:
+        <ul>
+          <li>Immediate disqualification from the tournament</li>
+          <li>Permanent ban from participating in any future events organized by us</li>
+          <li>Reporting to the game developers for a permanent ban from the game itself</li>
+        </ul>
+      </li>
+      <li><strong>Match Absence and Refunds:</strong> Players who miss any match or fail to join the room on time will be considered forfeited for that round. No refund of entry fees or prize money will be provided for missed matches.</li>
+      <li><strong>Fair Play and Conduct:</strong> Respect all players and organizers. Any toxic behavior or abuse may lead to warnings or disqualification.</li>
+      <li><strong>Disputes:</strong> All disputes must be reported immediately to the organizers with valid evidence. Organizer’s decision will be final.</li>
+    </ul>
+  </section>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal">
+    <div class="modal-content">
+      <button class="closeBtn" title="Close">&times;</button>
+      <h3>Join Tournament</h3>
+      <p id="modalTournamentName"></p>
+      <p>Entry Fee: <span id="modalEntryFee"></span></p>
+      <form id="paymentForm">
+        <label for="player_leader_Name">Player Name</label>
+        <input type="text" id="player_leader_Name" name="playerName" required placeholder="Your IGN " />
+        <label for="player_leader_uid">uid</label>
+        <input type="text" id="player_leader_uid" name="player_leader_uid" required placeholder="YOUR FF UID" />
+        <!-- You can add more payment fields here -->
+
+        <button type="submit">Proceed to Pay</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Basic SPA logic: show/hide sections
+    const btnProfile = document.getElementById('btnProfile');
+    const btnGames = document.getElementById('btnGames');
+    const btnRules = document.getElementById('btnRules');
+
+    const profileSection = document.getElementById('profileSection');
+    const gamesSection = document.getElementById('gamesSection');
+    const rulesSection = document.getElementById('rulesSection');
+
+    function showSection(section) {
+      profileSection.style.display = 'none';
+      gamesSection.style.display = 'none';
+      rulesSection.style.display = 'none';
+
+      section.style.display = 'block';
+    }
+
+    // Show Games by default (as in your code)
+    showSection(gamesSection);
+
+    btnProfile.addEventListener('click', () => showSection(profileSection));
+    btnGames.addEventListener('click', () => showSection(gamesSection));
+    btnRules.addEventListener('click', () => showSection(rulesSection));
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'login.html'; // redirect to login
+    });
+
+    // Load logged-in user info
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if (!loggedInUser) {
+      // No logged-in user, redirect to login page
+      window.location.href = 'login.html';
+    }
+
+    // Display logged-in user profile games
+    const userGames = JSON.parse(localStorage.getItem('userGames')) || {};
+    const profileGamesContainer = document.getElementById('profileGames');
+
+    if (userGames[loggedInUser] && userGames[loggedInUser].length > 0) {
+      profileGamesContainer.innerHTML = '';
+      userGames[loggedInUser].forEach(game => {
+        const div = document.createElement('div');
+        div.className = 'game-entry';
+        div.textContent = `${game.tournament} - ${game.date} - ${game.result}`;
+        profileGamesContainer.appendChild(div);
+      });
+    } else {
+      profileGamesContainer.textContent = 'You have not played any games yet.';
+    }
+
+    // Load tournaments dynamically in gamesSection from admin (for now placeholder)
+    const tournamentsList = document.getElementById('tournamentsList');
+
+    function loadTournaments() {
+      const tournaments = JSON.parse(localStorage.getItem('tournaments')) || [];
+
+      if (tournaments.length === 0) {
+        tournamentsList.innerHTML = '<p>No tournaments available yet.</p>';
+        return;
+      }
+
+      tournamentsList.innerHTML = ''; // Clear existing content
+
+      tournaments.forEach((tour, index) => {
+        const div = document.createElement('div');
+        div.className = 'game-entry';
+        div.innerHTML = `
+          <div>
+            <strong>${tour.name}</strong><br />
+            Date: ${tour.date}<br />
+	    Description:${tour.description || 'N/A'}<br />
+            Prize Pool: ${tour.prizePool || 'N/A'}<br />
+            Entry Fee: ${tour.entryFee || 'N/A'}
+          </div>
+          <button class="joinBtn" data-index="${index}">Join</button>
+        `;
+        tournamentsList.appendChild(div);
+      });
+
+      // Add event listeners for Join buttons
+      document.querySelectorAll('.joinBtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = e.target.getAttribute('data-index');
+          openPaymentModal(tournaments[idx]);
+        });
+      });
+    }
+
+    // Call this on page load to populate tournaments list
+    loadTournaments();
+
+    // Payment modal logic
+    const paymentModal = document.getElementById('paymentModal');
+    const modalTournamentName = document.getElementById('modalTournamentName');
+    const modalEntryFee = document.getElementById('modalEntryFee');
+    const closeBtn = document.querySelector('#paymentModal .closeBtn');
+    const paymentForm = document.getElementById('paymentForm');
+
+    function openPaymentModal(tournament) {
+      modalTournamentName.textContent = tournament.name;
+      modalEntryFee.textContent = tournament.entryFee || 'N/A';
+      paymentModal.style.display = 'block';
+    }
+
+    closeBtn.addEventListener('click', () => {
+      paymentModal.style.display = 'none';
+      paymentForm.reset();
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === paymentModal) {
+        paymentModal.style.display = 'none';
+        paymentForm.reset();
+      }
+    });
+
+    paymentForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  // Bug here: you wrote "paymentForm.player_leader_uid.values"
+  // it should be "paymentForm.player_leader_uid.value" (singular)
+
+  const player_leader_Name = paymentForm.player_leader_Name.value;
+  const player_leader_uid = paymentForm.player_leader_uid.value;
+
+  alert(`Thank you ${player_leader_Name}! Payment processing for ${modalTournamentName.textContent} will start now.`);
+
+  // Redirect or handle payment here
+  window.location.href = 'payment.html';
+
+  paymentModal.style.display = 'none';
+  paymentForm.reset();
+});
+
+  </script>
+</body>
+</html>
+
